@@ -1,23 +1,48 @@
+import React, { Component } from "react"
+
 import styled from "./Searchbar.module.css"
+import { toast } from "react-toastify"
 
-const Searchbar = ({ onSubmit }) => {
-  return (
-    <header className={styled.Searchbar}>
-      <form className={styled.SearchForm}>
-        <button type="submit" className={styled.SearchFormButton}>
-          <span className={styled.SearchFormButtonLabel}>Search</span>
-        </button>
+class Searchbar extends Component {
+  state = { searchQuery: "" }
 
-        <input
-          className={styled.SearchFormInput}
-          type="text"
-          autocomplete="off"
-          autofocus
-          placeholder="Search images and photos"
-        />
-      </form>
-    </header>
-  )
+  onHandleInputChange = (e) => {
+    const { name, value } = e.target
+    this.setState({ [name]: value })
+  }
+
+  onSubmit = (e) => {
+    e.preventDefault()
+    if (this.state.searchQuery.trim() === "") {
+      return toast.error("Please enter the date")
+    }
+    this.props.onSubmit(this.state)
+    this.setState({ searchQuery: "" })
+  }
+
+  render() {
+    const { searchQuery } = this.state
+    return (
+      <header className={styled.Searchbar}>
+        <form onSubmit={this.onSubmit} className={styled.SearchForm}>
+          <button type="submit" className={styled.SearchFormButton}>
+            <span className={styled.SearchFormButtonLabel}>Search</span>
+          </button>
+
+          <input
+            className={styled.SearchFormInput}
+            type="text"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+            onChange={this.onHandleInputChange}
+            value={searchQuery}
+            name="searchQuery"
+          />
+        </form>
+      </header>
+    )
+  }
 }
 
 export default Searchbar
