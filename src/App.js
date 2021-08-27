@@ -3,8 +3,6 @@ import { ToastContainer } from "react-toastify"
 import ImageGallery from "./components/ImageGallery/ImageGallery"
 import Searchbar from "./components/Searchbar/Searchbar"
 
-// import Loader from "react-loader-spinner"
-
 class App extends Component {
   state = { searchQuery: "" }
 

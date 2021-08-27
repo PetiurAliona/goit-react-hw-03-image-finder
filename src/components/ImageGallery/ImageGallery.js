@@ -7,6 +7,7 @@ import { toast } from "react-toastify"
 
 import api from "../utills/ApiService"
 import Button from "../Button/Button"
+import LoaderSpinner from "../Loader/Loader"
 
 class ImageGallery extends Component {
   state = {
@@ -24,7 +25,13 @@ class ImageGallery extends Component {
       api.searchQuery = nextQuery
       this.saveImages()
     }
+
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: "smooth",
+    })
   }
+
   saveImages() {
     this.setState({ loading: "true" })
 
@@ -46,9 +53,9 @@ class ImageGallery extends Component {
     this.saveImages()
   }
 
-  onImgClick = (id) => {
-    const { imgArr } = this.state
-    const img = imgArr.find((e) => e.id === id).largeImageURL
+  onClickImg = (id) => {
+    const { arrImg } = this.state
+    const img = arrImg.find((e) => e.id === id).largeImageURL
     this.setState({ imgInModal: img })
   }
 
@@ -58,11 +65,18 @@ class ImageGallery extends Component {
     return (
       <>
         <ul className={styled.ImageGallery}>
-          {arrImg.map(({ webformatURL, tags }, index) => (
-            <ImageGalleryItem webformatURL={webformatURL} name={tags} key={index} id={index} />
+          {arrImg.map(({ webformatURL, tags, id }, index) => (
+            <ImageGalleryItem
+              webformatURL={webformatURL}
+              name={tags}
+              key={index}
+              id={id}
+              onClickImg={this.onClickImg}
+            />
           ))}
         </ul>
         {arrImg.length > 1 && !loading && <Button onBtnLoadClick={this.onLoadMoreClick} />}
+        {arrImg.length > 1 && loading && <LoaderSpinner />}
       </>
     )
   }
