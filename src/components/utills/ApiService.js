@@ -13,10 +13,20 @@ function fetchQuery() {
   })
 }
 
+function incrementPage() {
+  this.page += 1
+}
+
+function resetPage() {
+  this.page = 1
+}
+
 const api = {
   searchQuery: "",
   page: 1,
   fetchQuery,
+  incrementPage,
+  resetPage,
 }
 
 export default api

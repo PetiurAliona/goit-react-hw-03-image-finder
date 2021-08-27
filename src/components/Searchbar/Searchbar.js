@@ -17,7 +17,6 @@ class Searchbar extends Component {
       return toast.error("Please enter the date")
     }
     this.props.onSubmit(this.state)
-    this.setState({ searchQuery: "" })
   }
 
   render() {

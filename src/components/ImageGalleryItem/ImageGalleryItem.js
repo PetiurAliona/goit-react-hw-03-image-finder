@@ -1,9 +1,9 @@
 import styled from "./ImageGalleryItem.module.css"
 
-const ImageGalleryItem = () => {
+const ImageGalleryItem = ({ webformatURL, name, onClickImg, id }) => {
   return (
-    <li className={styled.ImageGalleryItem}>
-      <img src="" alt="" className={styled.ImageGalleryItemImage} />
+    <li className={styled.ImageGalleryItem} onClick={() => onClickImg(id)}>
+      <img src={webformatURL} alt={name} className={styled.ImageGalleryItemImage} />
     </li>
   )
 }

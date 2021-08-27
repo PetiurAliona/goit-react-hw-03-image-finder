@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { ToastContainer } from "react-toastify"
+import ImageGallery from "./components/ImageGallery/ImageGallery"
 import Searchbar from "./components/Searchbar/Searchbar"
 
 // import Loader from "react-loader-spinner"
@@ -7,12 +8,18 @@ import Searchbar from "./components/Searchbar/Searchbar"
 class App extends Component {
   state = { searchQuery: "" }
 
+  onNewQuery = ({ searchQuery }) => {
+    this.setState({ searchQuery })
+  }
+
   render() {
+    const { searchQuery } = this.state
     return (
       <>
-        <Searchbar />
+        <Searchbar onSubmit={this.onNewQuery} />
+        <ImageGallery searchQuery={searchQuery} />
 
-        <ToastContainer />
+        <ToastContainer autoClose={3000} />
       </>
     )
   }
