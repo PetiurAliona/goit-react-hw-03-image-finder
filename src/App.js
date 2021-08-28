@@ -16,8 +16,7 @@ class App extends Component {
       <>
         <Searchbar onSubmit={this.onNewQuery} />
         <ImageGallery searchQuery={searchQuery} />
-
-        <ToastContainer autoClose={3000} />
+        <ToastContainer autoClose={2000} />
       </>
     )
   }

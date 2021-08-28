@@ -4,6 +4,9 @@ import ImageGalleryItem from "../ImageGalleryItem/ImageGalleryItem"
 import styled from "./ImageGallery.module.css"
 
 import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+
+import PropTypes from "prop-types"
 
 import api from "../utills/ApiService"
 import Button from "../Button/Button"
@@ -12,7 +15,7 @@ import LoaderSpinner from "../Loader/Loader"
 class ImageGallery extends Component {
   state = {
     arrImg: [],
-    loading: "false",
+    loading: false,
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -26,25 +29,28 @@ class ImageGallery extends Component {
       this.saveImages()
     }
 
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: "smooth",
-    })
+    if (api.page > 1) {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth",
+      })
+    }
   }
 
   saveImages() {
-    this.setState({ loading: "true" })
+    this.setState({ loading: true })
+    const notifyError = () => toast.error("Images wasn`t found")
 
     api
       .fetchQuery()
-      .then((res) =>
+      .then((res) => {
+        if (!res.hits.length) notifyError()
         this.setState((prevState) => ({
           arrImg: [...prevState.arrImg, ...res.hits],
         }))
-      )
-      .catch((error) => {
-        this.setState({ error })
       })
+
+      .catch((error) => console.log(error))
       .finally(() => this.setState({ loading: false }))
   }
 
@@ -53,33 +59,24 @@ class ImageGallery extends Component {
     this.saveImages()
   }
 
-  onClickImg = (id) => {
-    const { arrImg } = this.state
-    const img = arrImg.find((e) => e.id === id).largeImageURL
-    this.setState({ imgInModal: img })
-  }
-
   render() {
     const { arrImg, loading } = this.state
-
     return (
       <>
         <ul className={styled.ImageGallery}>
-          {arrImg.map(({ webformatURL, tags, id }, index) => (
-            <ImageGalleryItem
-              webformatURL={webformatURL}
-              name={tags}
-              key={index}
-              id={id}
-              onClickImg={this.onClickImg}
-            />
+          {arrImg.map(({ webformatURL, tags, largeImageURL }, index) => (
+            <ImageGalleryItem webformatURL={webformatURL} name={tags} key={index} largeImageURL={largeImageURL} />
           ))}
         </ul>
         {arrImg.length > 1 && !loading && <Button onBtnLoadClick={this.onLoadMoreClick} />}
-        {arrImg.length > 1 && loading && <LoaderSpinner />}
+        {loading && <LoaderSpinner />}
       </>
     )
   }
+}
+
+ImageGallery.propTypes = {
+  searchQuery: PropTypes.string,
 }
 
 export default ImageGallery

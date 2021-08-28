@@ -1,12 +1,16 @@
 import React, { Component } from "react"
 import { createPortal } from "react-dom"
+import styled from "./Modal.module.css"
+import PropTypes from "prop-types"
 
 const modalRoot = document.querySelector("#modal")
 
-import styled from "./Modal.module.css"
-
 class Modal extends Component {
-  state = {}
+  static propTypes = {
+    onClose: PropTypes.func,
+    largeImageURL: PropTypes.string,
+    tags: PropTypes.string,
+  }
 
   componentDidMount() {
     window.addEventListener("keydown", this.closeModalEsc)
@@ -16,7 +20,7 @@ class Modal extends Component {
   componentWillUnmount() {
     window.removeEventListener("keydown", this.closeModalEsc)
     const body = document.querySelector("body")
-    body.style.overflow = "auto"
+    body.style.overflow = ""
   }
 
   closeModalEsc = (e) => {
@@ -30,7 +34,7 @@ class Modal extends Component {
   render() {
     const { largeImageURL, tags } = this.props
     return createPortal(
-      <div className={styled.Overlay} onClick={onOverlayClick}>
+      <div className={styled.Overlay} onClick={this.onOverlayClick}>
         <div className={styled.Modal}>
           <img src={largeImageURL} alt={tags} />
         </div>
